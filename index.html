@@ -2,51 +2,52 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>诸神黄昏：狼人杀</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      font-family: 'Helvetica', sans-serif;
-    }
-
-    body {
-      position: relative;
+      font-family: 'Press Start 2P', monospace;
+      background: black;
     }
 
     video.bg-video {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      z-index: -1;
+      z-index: -2;
     }
 
     .overlay {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      text-align: center;
+      background: rgba(0, 0, 0, 0.5);
       color: white;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(3px);
+      text-align: center;
+      text-shadow: 2px 2px 8px black;
     }
 
     h1 {
-      font-size: 3em;
+      font-size: 2.2em;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1em;
       margin-bottom: 2rem;
-      text-shadow: 2px 2px 8px black;
     }
 
     .buttons {
@@ -56,27 +57,29 @@
 
     button {
       padding: 1rem 2rem;
-      font-size: 1.2em;
+      font-size: 0.9em;
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.85);
       transition: background 0.3s;
     }
 
     button:hover {
-      background: rgba(255, 255, 255, 1);
+      background: white;
     }
 
     #soundToggle {
       position: absolute;
       top: 20px;
       right: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-size: 0.8em;
       padding: 0.5rem 1rem;
-      font-size: 0.9em;
-      border: none;
       border-radius: 5px;
-      background: rgba(255,255,255,0.7);
+      z-index: 10;
+      border: 1px solid white;
     }
 
     @media screen and (orientation: portrait) {
@@ -84,14 +87,15 @@
         content: '请横屏体验游戏';
         position: absolute;
         z-index: 99;
-        background: rgba(0,0,0,0.9);
+        background: rgba(0,0,0,0.95);
         color: white;
-        font-size: 2em;
+        font-size: 1.5em;
         width: 100%;
         height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-family: sans-serif;
       }
       .overlay {
         display: none;
@@ -101,12 +105,12 @@
 </head>
 <body>
   <video class="bg-video" autoplay muted loop playsinline>
-    <source src="assets/bg.mp4" type="video/mp4">
-    您的浏览器不支持视频背景。
+    <source src="bg.mp4" type="video/mp4">
+    您的浏览器不支持视频播放。
   </video>
 
   <audio id="bgm" autoplay loop>
-    <source src="assets/bgm.mp3" type="audio/mpeg">
+    <source src="bgm.mp3" type="audio/mpeg">
     您的浏览器不支持音频播放。
   </audio>
 
@@ -114,6 +118,7 @@
 
   <div class="overlay">
     <h1>诸神黄昏：狼人杀</h1>
+    <div class="subtitle">Ragnarök: Werewolf</div>
     <div class="buttons">
       <button onclick="alert('创建房间功能开发中')">创建房间</button>
       <button onclick="alert('加入房间功能开发中')">加入房间</button>
