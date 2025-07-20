@@ -2,11 +2,16 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
   <title>诸神黄昏：狼人杀</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     html, body {
       width: 100vw;
       height: 100vh;
@@ -15,125 +20,122 @@
       background: black;
     }
 
-    video.bg-video {
+    video.bg {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       object-fit: cover;
-      z-index: -2;
+      z-index: -1;
     }
 
     .overlay {
-      position: relative;
-      z-index: 1;
-      height: 100%;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       text-align: center;
-      text-shadow: 2px 2px 8px black;
+      color: orange;
+      text-shadow:
+        -2px -2px 0 red,
+        2px -2px 0 red,
+        -2px 2px 0 red,
+        2px 2px 0 red,
+        0 0 5px red;
     }
 
     h1 {
-      font-size: 2.2em;
-      margin-bottom: 0.5rem;
+      font-size: 2.5rem;
     }
 
-    .subtitle {
-      font-size: 1em;
-      margin-bottom: 2rem;
+    h2 {
+      font-size: 1rem;
+      margin-top: 10px;
+      text-shadow:
+        -1px -1px 0 red,
+        1px -1px 0 red,
+        -1px 1px 0 red,
+        1px 1px 0 red,
+        0 0 4px red;
     }
 
     .buttons {
+      margin-top: 40px;
       display: flex;
-      gap: 2rem;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
     }
 
     button {
-      padding: 1rem 2rem;
-      font-size: 0.9em;
+      background-color: rgba(255, 69, 0, 0.9);
+      color: white;
+      font-size: 0.8rem;
+      padding: 10px 20px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.85);
-      transition: background 0.3s;
+      box-shadow: 0 0 10px red;
+      transition: 0.3s;
     }
 
     button:hover {
-      background: white;
+      background-color: red;
     }
 
-    #soundToggle {
+    #audio-toggle {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 10px;
+      right: 10px;
       background: rgba(0, 0, 0, 0.6);
       color: white;
-      font-size: 0.8em;
-      padding: 0.5rem 1rem;
+      padding: 5px 10px;
+      font-size: 0.6rem;
       border-radius: 5px;
+      cursor: pointer;
       z-index: 10;
-      border: 1px solid white;
-    }
-
-    @media screen and (orientation: portrait) {
-      body::before {
-        content: '请横屏体验游戏';
-        position: absolute;
-        z-index: 99;
-        background: rgba(0,0,0,0.95);
-        color: white;
-        font-size: 1.5em;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: sans-serif;
-      }
-      .overlay {
-        display: none;
-      }
     }
   </style>
 </head>
 <body>
-  <video class="bg-video" autoplay muted loop playsinline>
+
+  <!-- 背景视频 -->
+  <video class="bg" autoplay loop muted id="bgVideo">
     <source src="bg.mp4" type="video/mp4">
-    您的浏览器不支持视频播放。
   </video>
 
+  <!-- 音乐控制 -->
+  <div id="audio-toggle">🔊 音效</div>
   <audio id="bgm" autoplay loop>
     <source src="bgm.mp3" type="audio/mpeg">
-    您的浏览器不支持音频播放。
   </audio>
 
-  <button id="soundToggle">🔊 音效关闭</button>
-
+  <!-- 页面内容 -->
   <div class="overlay">
     <h1>诸神黄昏：狼人杀</h1>
-    <div class="subtitle">Ragnarök: Werewolf</div>
+    <h2>Ragnarök: Werewolf</h2>
     <div class="buttons">
-      <button onclick="alert('创建房间功能开发中')">创建房间</button>
-      <button onclick="alert('加入房间功能开发中')">加入房间</button>
+      <button>创建房间</button>
+      <button>加入房间</button>
     </div>
   </div>
 
+  <!-- JS 控制音效 -->
   <script>
-    const bgm = document.getElementById('bgm');
-    const toggle = document.getElementById('soundToggle');
-    let isMuted = false;
+    const audio = document.getElementById('bgm');
+    const toggleBtn = document.getElementById('audio-toggle');
+    let isPlaying = true;
 
-    toggle.addEventListener('click', () => {
-      isMuted = !isMuted;
-      bgm.muted = isMuted;
-      toggle.textContent = isMuted ? '🔈 音效开启' : '🔊 音效关闭';
+    toggleBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        audio.pause();
+        toggleBtn.textContent = '🔇 静音';
+      } else {
+        audio.play();
+        toggleBtn.textContent = '🔊 音效';
+      }
+      isPlaying = !isPlaying;
     });
   </script>
 </body>
