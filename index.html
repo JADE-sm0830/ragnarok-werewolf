@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>诸神黄昏：狼人杀</title>
+
+  <!-- 像素字体 -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
   <style>
     * {
       margin: 0;
@@ -12,129 +16,108 @@
     }
 
     html, body {
-      width: 100vw;
-      height: 100vh;
+      height: 100%;
+      font-family: 'Press Start 2P', cursive;
       overflow: hidden;
-      font-family: 'Press Start 2P', sans-serif;
-      background-color: black;
     }
 
-    @font-face {
-      font-family: 'Press Start 2P';
-      src: url('https://fonts.gstatic.com/s/pressstart2p/v11/e3t4euO8T-267oIAQAu6jDQyK3n6-TnIfx0.woff2') format('woff2');
-    }
-
-    video.bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: -1;
+    body {
+      background: url('02fd0010b688d99eb1d7abaacdc91f0a.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #FFA500;
+      text-shadow: 2px 2px #b22222;
     }
 
     .title {
+      font-size: 20px;
       text-align: center;
-      margin-top: 60px;
-      color: #ffa500;
-      text-shadow: 2px 2px 0 #ff0000, -2px -2px 0 #ff0000;
+      margin-bottom: 5px;
     }
 
-    .title h1 {
-      font-size: 32px;
-    }
-
-    .title h2 {
-      font-size: 14px;
-      margin-top: 10px;
+    .subtitle {
+      font-size: 10px;
+      margin-bottom: 40px;
+      color: #ffcc00;
+      text-shadow: 1px 1px #ff3300;
     }
 
     .buttons {
-      margin-top: 80px;
       display: flex;
-      justify-content: center;
-      gap: 50px;
+      gap: 40px;
     }
 
     button {
-      padding: 15px 30px;
-      background: rgba(0,0,0,0.6);
-      border: 2px solid #ffa500;
-      color: #ffa500;
-      font-size: 12px;
+      padding: 12px 24px;
+      font-size: 10px;
       cursor: pointer;
-      border-radius: 8px;
-      text-shadow: 1px 1px #ff0000;
+      font-family: 'Press Start 2P', cursive;
+      background: rgba(0, 0, 0, 0.6);
+      color: #FFA500;
+      border: 2px solid #b22222;
+      text-shadow: 1px 1px #b22222;
+      transition: background 0.3s;
     }
 
     button:hover {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
     }
 
-    #audioToggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: rgba(0,0,0,0.6);
+    .click-tip {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
       color: white;
-      border: none;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 10px;
-      border-radius: 6px;
-      z-index: 10;
-    }
-
-    @media (orientation: portrait) {
-      body::before {
-        content: "请旋转设备以横屏游玩";
-        position: fixed;
-        z-index: 999;
-        width: 100vw;
-        height: 100vh;
-        background: black;
-        color: white;
-        font-size: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 20px;
-      }
+      background: rgba(0,0,0,0.6);
+      padding: 20px;
+      border: 2px solid #fff;
+      text-align: center;
+      font-size: 12px;
+      z-index: 999;
     }
   </style>
 </head>
 <body>
-  <video autoplay loop muted playsinline class="bg-video" id="bg-video">
-    <source src="bg.mp4" type="video/mp4" />
-    您的浏览器不支持视频背景。
-  </video>
 
-  <audio id="bgm" src="bgm.mp3" autoplay loop></audio>
-  <button id="audioToggle">🔊 音效：开</button>
-
-  <div class="title">
-    <h1>诸神黄昏：狼人杀</h1>
-    <h2>Ragnarök: Werewolf Game</h2>
-  </div>
+  <div class="title">诸神黄昏：狼人杀</div>
+  <div class="subtitle">Ragnarök: Werewolf</div>
 
   <div class="buttons">
-    <button onclick="alert('即将进入创建房间页面')">创建房间</button>
-    <button onclick="alert('即将进入加入房间页面')">加入房间</button>
+    <button onclick="alert('创建房间功能开发中')">创建房间</button>
+    <button onclick="alert('加入房间功能开发中')">加入房间</button>
+  </div>
+
+  <!-- 背景音乐 -->
+  <audio id="bgm" autoplay loop>
+    <source src="bgm.mp3" type="audio/mpeg" />
+    您的浏览器不支持音频播放。
+  </audio>
+
+  <!-- 音频提示 -->
+  <div id="clickTip" class="click-tip" style="display:none;">
+    👆 请点击任意位置开启音效
   </div>
 
   <script>
-    const bgm = document.getElementById("bgm");
-    const toggleBtn = document.getElementById("audioToggle");
+    const bgm = document.getElementById('bgm');
+    const clickTip = document.getElementById('clickTip');
 
-    toggleBtn.addEventListener("click", () => {
-      if (bgm.paused) {
-        bgm.play();
-        toggleBtn.textContent = "🔊 音效：开";
-      } else {
-        bgm.pause();
-        toggleBtn.textContent = "🔇 音效：关";
+    window.addEventListener("load", () => {
+      const playPromise = bgm.play();
+
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // 自动播放失败，要求用户点击开启
+          clickTip.style.display = 'block';
+
+          document.body.addEventListener('click', () => {
+            bgm.play();
+            clickTip.style.display = 'none';
+          }, { once: true });
+        });
       }
     });
   </script>
