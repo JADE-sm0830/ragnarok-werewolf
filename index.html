@@ -26,6 +26,7 @@
       height: 100%;
       object-fit: cover;
       z-index: -1;
+      pointer-events: none; /* 防止遮挡按钮 */
     }
 
     .container {
@@ -39,6 +40,7 @@
       text-align: center;
       color: white;
       padding: 2rem;
+      z-index: 1;
     }
 
     h1 {
@@ -92,14 +94,14 @@
 <body>
 
   <!-- 背景视频 -->
-  <video class="bg" autoplay muted loop playsinline>
+  <video class="bg" id="bgVideo" autoplay muted loop playsinline>
     <source src="assets/bg.mp4" type="video/mp4" />
     您的浏览器不支持视频背景。
   </video>
 
   <!-- 音频开关 -->
   <button class="audio-toggle" onclick="toggleAudio()">🔊 音效</button>
-  <audio id="bgm" src="assets/bgm.mp3" autoplay loop></audio>
+  <audio id="bgm" src="assets/bgm.mp3" loop></audio>
 
   <!-- 内容 -->
   <div class="container">
@@ -113,17 +115,34 @@
 
   <script>
     const audio = document.getElementById('bgm');
+    let audioStarted = false;
+
     function toggleAudio() {
-      if (audio.paused) {
-        audio.play();
-        event.target.textContent = '🔊 音效';
+      if (!audioStarted) {
+        audio.play().catch(err => {
+          console.log('需要用户交互后才能播放音频。');
+        });
+        audioStarted = true;
       } else {
-        audio.pause();
-        event.target.textContent = '🔇 静音';
+        if (audio.paused) {
+          audio.play();
+          event.target.textContent = '🔊 音效';
+        } else {
+          audio.pause();
+          event.target.textContent = '🔇 静音';
+        }
       }
     }
 
-    // 强制横屏（仅提示）
+    // 第一次用户点击页面任意位置时，启动音频
+    document.body.addEventListener('click', () => {
+      if (!audioStarted) {
+        audio.play().catch(() => {});
+        audioStarted = true;
+      }
+    }, { once: true });
+
+    // 提示横屏
     if (window.innerHeight > window.innerWidth) {
       alert('建议横屏体验以获得最佳效果。');
     }
