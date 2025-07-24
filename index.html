@@ -12,9 +12,9 @@
       padding: 0;
       overflow: hidden;
       font-family: 'Press Start 2P', cursive;
+      background: black;
     }
 
-    /* 视频背景 */
     #video-bg {
       position: fixed;
       top: 0;
@@ -25,7 +25,6 @@
       z-index: -1;
     }
 
-    /* 音效按钮 */
     #sound-toggle {
       position: fixed;
       top: 20px;
@@ -106,9 +105,9 @@
   </video>
 
   <!-- 背景音乐 -->
-  <audio id="bgm" src="bgm.mp3" autoplay loop></audio>
+  <audio id="bgm" src="bgm.mp3" loop></audio>
 
-  <!-- 音效开关 -->
+  <!-- 音效按钮 -->
   <div id="sound-toggle">🔊 音效开</div>
 
   <!-- 页面内容 -->
@@ -124,17 +123,25 @@
     const toggle = document.getElementById('sound-toggle');
     let isMuted = false;
 
+    // 点击按钮切换音效
     toggle.addEventListener('click', () => {
       isMuted = !isMuted;
       audio.muted = isMuted;
+      if (!audio.paused) {
+        audio.play();
+      }
       toggle.innerText = isMuted ? '🔇 音效关' : '🔊 音效开';
     });
 
-    // 尝试自动播放音频（兼容部分浏览器）
+    // 用户首次点击页面播放音频
+    document.addEventListener('click', () => {
+      audio.play().catch(() => {});
+    }, { once: true });
+
+    // 自动播放尝试（兼容部分浏览器）
     window.addEventListener('DOMContentLoaded', () => {
       audio.play().catch(() => {
-        // 某些浏览器需用户交互后播放
-        toggle.innerText = "🔇 请点击开启音效";
+        toggle.innerText = '🔇 请点击开启音效';
       });
     });
   </script>
