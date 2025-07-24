@@ -123,7 +123,19 @@
     const toggle = document.getElementById('sound-toggle');
     let isMuted = false;
 
-    // 点击按钮切换音效
+    // 尝试自动播放音效
+    window.addEventListener('load', () => {
+      audio.muted = false;
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // 如果自动播放失败（浏览器限制），要求用户点击
+          toggle.innerText = '🔇 请点击开启音效';
+        });
+      }
+    });
+
+    // 切换静音
     toggle.addEventListener('click', () => {
       isMuted = !isMuted;
       audio.muted = isMuted;
@@ -131,18 +143,6 @@
         audio.play();
       }
       toggle.innerText = isMuted ? '🔇 音效关' : '🔊 音效开';
-    });
-
-    // 用户首次点击页面播放音频
-    document.addEventListener('click', () => {
-      audio.play().catch(() => {});
-    }, { once: true });
-
-    // 自动播放尝试（兼容部分浏览器）
-    window.addEventListener('DOMContentLoaded', () => {
-      audio.play().catch(() => {
-        toggle.innerText = '🔇 请点击开启音效';
-      });
     });
   </script>
 </body>
