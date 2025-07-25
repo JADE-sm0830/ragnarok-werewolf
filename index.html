@@ -1,107 +1,95 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>诸神黄昏：狼人杀</title>
-  <style>
-    /* 像素字体导入 */
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-    html, body {
+  <!-- 像素字体 -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
       margin: 0;
       padding: 0;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Press Start 2P', cursive;
-      background-color: black;
+      box-sizing: border-box;
     }
 
-    video#bg-video {
+    body, html {
+      height: 100%;
+      font-family: 'Press Start 2P', monospace;
+      overflow: hidden;
+    }
+
+    video#bgVideo {
       position: fixed;
-      right: 0;
-      bottom: 0;
+      top: 0;
+      left: 0;
       min-width: 100%;
       min-height: 100%;
       object-fit: cover;
-      z-index: -2;
+      z-index: -1;
     }
 
-    #overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
+    .container {
+      position: relative;
       height: 100%;
-      z-index: 1;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      color: white;
+      align-items: center;
       text-align: center;
+      color: red;
+      text-shadow: 2px 2px orange;
     }
 
     h1, h2 {
-      margin: 10px;
+      margin: 20px;
       font-size: 24px;
-      text-shadow:
-        -2px -2px 0 orange,
-        2px -2px 0 orange,
-        -2px 2px 0 orange,
-        2px 2px 0 orange,
-        0 0 10px red;
-    }
-
-    h1 {
-      font-size: 32px;
     }
 
     button {
       margin: 10px;
-      padding: 12px 24px;
+      padding: 10px 20px;
       font-size: 14px;
-      cursor: pointer;
-      font-family: 'Press Start 2P', cursive;
-      background: rgba(255, 255, 255, 0.1);
+      background-color: rgba(255, 69, 0, 0.8);
       color: white;
-      border: 2px solid white;
+      border: none;
       border-radius: 8px;
+      cursor: pointer;
     }
 
-    #music-toggle {
+    .audio-control {
       position: absolute;
-      top: 20px;
+      top: 15px;
       right: 20px;
-      z-index: 2;
-      background-color: rgba(0, 0, 0, 0.5);
-      border: none;
+      z-index: 10;
+      font-size: 14px;
+      background: rgba(0, 0, 0, 0.4);
       color: white;
-      padding: 10px 15px;
-      cursor: pointer;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 6px;
     }
   </style>
 </head>
-<body>
 
+<body>
   <!-- 背景视频 -->
-  <video id="bg-video" autoplay muted loop playsinline>
-    <source src="bg.mp4" type="video/mp4">
+  <video id="bgVideo" autoplay loop muted>
+    <source src="bg.mp4" type="video/mp4" />
     您的浏览器不支持视频背景。
   </video>
 
-  <!-- 背景音乐 -->
-  <audio id="bg-music" autoplay loop>
-    <source src="bgm.mp3" type="audio/mpeg">
-    您的浏览器不支持音频。
+  <!-- 音乐按钮和自动播放 -->
+  <div class="audio-control" onclick="toggleMusic()">
+    🔊 音效开
+  </div>
+  <audio id="bgMusic" autoplay loop>
+    <source src="music.mp3" type="audio/mpeg" />
+    您的浏览器不支持音乐播放。
   </audio>
 
-  <!-- 音乐开关按钮 -->
-  <button id="music-toggle">🔊 音效开</button>
-
-  <!-- 内容层 -->
-  <div id="overlay">
+  <div class="container">
     <h1>诸神黄昏：狼人杀</h1>
     <h2>Ragnarök: Werewolf</h2>
     <button onclick="alert('创建房间功能开发中')">创建房间</button>
@@ -109,26 +97,16 @@
   </div>
 
   <script>
-    const music = document.getElementById('bg-music');
-    const toggleBtn = document.getElementById('music-toggle');
-
-    let isPlaying = true;
-
-    toggleBtn.onclick = function () {
-      if (isPlaying) {
-        music.pause();
-        toggleBtn.textContent = '🔇 音效关';
+    const bgMusic = document.getElementById('bgMusic');
+    function toggleMusic() {
+      if (bgMusic.paused) {
+        bgMusic.play();
+        document.querySelector('.audio-control').innerText = "🔊 音效开";
       } else {
-        music.play();
-        toggleBtn.textContent = '🔊 音效开';
+        bgMusic.pause();
+        document.querySelector('.audio-control').innerText = "🔇 音效关";
       }
-      isPlaying = !isPlaying;
-    };
-
-    // 尝试自动播放音乐（部分浏览器需要用户交互）
-    document.addEventListener('click', () => {
-      music.play().catch(() => {});
-    }, { once: true });
+    }
   </script>
 </body>
 </html>
